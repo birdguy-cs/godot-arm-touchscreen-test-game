@@ -1,49 +1,86 @@
 using Godot;
-using System;
+using System.Collections.Generic;
 
 public partial class MainMenu : Node2D
 {
-    private Texture2D _texture;
-    private Vector2 _lastTouchPosition = Vector2.Zero; // Store last touch position
-    private bool _isTouched = false; // Track touch state
+/*	[Export] PackedScene touchPointScene;
+	[Export] PackedScene originalTouchPointScene;
+	
+	private Dictionary<int, TouchData> touchData = new Dictionary<int,TouchData>();
+	
+	public override void _Input(InputEvent @event)
+	{
+		if(@event is InputEventScreenTouch touch)
+		{
+			if(touch.IsPressed())
+			{
+				Node2D newTouchPoint = touchPointScene.Instantiate<Node2D>();
+				Node2D newOriginalTouchPoint = originalTouchPointScene.Instantiate<Node2D>();
+				
+				AddChild(newTouchPoint);
+				AddChild(newOriginalTouchPoint);
+				
+				newTouchPoint.Poisition = touch.Position;
+				newOriginalTouchPoint.Position = touch.Position;
+				TouchData tempTouchData = new TouchData(
+					touchPoint = newTouchPoint,
+					originalTouchPoint = newOriginalTouchPoint
+				);
+				
+				touchData.Add(touch.Index, tempTouchData);
+			}
+			else
+			{
+				touchData[touch.Index].originalTouchPoint.QueueFree();
+				touchData[touch.Index].touchPoint.QueueFree();
+				
+				touchData.Remove(touch.Index);
+			}
+		}
+	}
+	
+	private struct TouchData()
+	{
+		public Node2D touchPoint;
+		public Node2D originalTouchPoint;
+	}
+	
+	
+	
+	
+	private Texture2D _texture;
+	private Vector2 _lastTouchPosition = Vector2.Zero; // Store last touch position
 
-    [Export] public Texture2D TextureTouched;
-    [Export] public Texture2D TextureUntouched;
+	[Export]
+	public Texture2D TextureTouched;
+	[Export]
+	public Texture2D TextureUntouched;
 
-    public override void _Ready()
-    {
-        // Set default texture on ready
-        _texture = TextureUntouched;
-    }
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventScreenTouch touchEvent)
+		{
+			if (touchEvent.Pressed)
+			{
+				_texture = TextureTouched;
+				_lastTouchPosition = touchEvent.Position; // Update touch position
+				QueueRedraw();
+				GD.Print($"Touched at: {touchEvent.Position}");
+			}
+			else
+			{
+				_texture = TextureUntouched;
+				QueueRedraw();
+				GD.Print($"Released at: {touchEvent.Position}");
+			}
+		}
+	}
 
-    public override void _Input(InputEvent @event)
-    {
-        if (@event is InputEventScreenTouch touchEvent)
-        {
-            if (touchEvent.Pressed)
-            {
-                _isTouched = true; // Mark as touched
-                _texture = TextureTouched; // Use Touched texture
-                _lastTouchPosition = touchEvent.Position; // Update touch position
-                QueueRedraw(); // Ensure screen is redrawn
-                GD.Print($"Touched at: {touchEvent.Position}");
-            }
-            else
-            {
-                _isTouched = false; // Mark as not touched
-                _texture = TextureUntouched; // Use Untouched texture
-                QueueRedraw(); // Ensure screen is redrawn
-                GD.Print($"Released at: {touchEvent.Position}");
-            }
-        }
-    }
-
-    public override void _Draw()
-    {
-        if (_texture != null)
-        {
-            // Draw the texture at the touch position, considering the correct coordinate system
-            DrawTexture(_texture, _lastTouchPosition);
-        }
-    }
+	public override void _Draw()
+	{
+		if (_texture != null)
+		{
+			DrawTexture(_texture, _lastTouchPosition);
+		}
+	}*/
 }
