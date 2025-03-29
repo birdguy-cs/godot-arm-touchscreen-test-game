@@ -47,11 +47,11 @@ func _input(event: InputEvent) -> void:
 			if is_inside_circle0(event.position):
 				circle0_pressing = true
 				circle0_index = event.index
-				circle0_position = event.position
+				circle0_position = event.position  # Update position to current touch position
 			elif is_inside_circle1(event.position):
 				circle1_pressing = true
 				circle1_index = event.index
-				circle1_position = event.position
+				circle1_position = event.position  # Update position to current touch position
 		else:
 			if event.index == circle0_index: 
 				circle0_pressing = false
@@ -61,24 +61,16 @@ func _input(event: InputEvent) -> void:
 				circle1_index = -1
 	elif event is InputEventScreenDrag:
 		if event.index == circle0_index:
-			circle0_position = event.position
-		elif event.index == circle1_index: 
-			circle1_position = event.position
+			circle0_position = event.position  # Update position during drag
+		elif event.index == circle1_index:
+			circle1_position = event.position  # Update position during drag
 
 # Update positions of circles when pressing or dragging
 func _process(delta: float) -> void:
-	if circle0_pressing:
-		var screen_pos = get_screen_position(circle0_relative_position)
-		# Move circle0's position based on drag
-		circle0_position = screen_pos
-	if circle1_pressing:
-		var screen_pos = get_screen_position(circle1_relative_position)
-		# Move circle1's position based on drag
-		circle1_position = screen_pos
+	# No need to move anything here since circles' positions are already updated in input events
 
 # Draw the circles on screen
 func _draw() -> void:
-	var screen_pos0 = get_screen_position(circle0_relative_position)
-	var screen_pos1 = get_screen_position(circle1_relative_position)
-	draw_circle(screen_pos0, circle0_radius, circle0_color)
-	draw_circle(screen_pos1, circle1_radius, circle1_color)
+	# Draw circles at their positions
+	draw_circle(circle0_position, circle0_radius, circle0_color)
+	draw_circle(circle1_position, circle1_radius, circle1_color)
