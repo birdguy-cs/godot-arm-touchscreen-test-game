@@ -7,11 +7,12 @@
 [node name="MainMenu" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(574, 323.5)
 script = ExtResource("1_06t4h")
 TextureTouched = ExtResource("2_fu7sn")
 TextureUntouched = ExtResource("3_jix8l")
 
 [node name="Img1225" type="Sprite2D" parent="."]
-position = Vector2(2, -1)
+position = Vector2(576, 322.5)
 scale = Vector2(0.29828, 0.0850694)
 texture = ExtResource("3_jix8l")
