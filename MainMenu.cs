@@ -23,7 +23,7 @@ public partial class MainMenu : Node2D
             if (touchEvent.Pressed)
             {
                 _isTouched = true; // Mark as touched
-                _texture = TextureTouched ?? _texture; // Use Touched texture
+                _texture = TextureTouched; // Use Touched texture
                 _lastTouchPosition = touchEvent.Position; // Update touch position
                 QueueRedraw(); // Ensure screen is redrawn
                 GD.Print($"Touched at: {touchEvent.Position}");
@@ -31,20 +31,10 @@ public partial class MainMenu : Node2D
             else
             {
                 _isTouched = false; // Mark as not touched
-                _texture = TextureUntouched ?? _texture; // Use Untouched texture
+                _texture = TextureUntouched; // Use Untouched texture
                 QueueRedraw(); // Ensure screen is redrawn
                 GD.Print($"Released at: {touchEvent.Position}");
             }
-        }
-    }
-
-    public override void _Process(float delta)
-    {
-        if (_isTouched && _texture != null)
-        {
-            // Convert touch position from screen space to local space if needed
-            _lastTouchPosition = GetViewport().GetMousePosition(); // This gets the mouse position in viewport coordinates
-            QueueRedraw(); // Ensure the texture is drawn at the updated position
         }
     }
 
