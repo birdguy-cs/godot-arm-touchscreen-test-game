@@ -24,19 +24,11 @@ func get_screen_position(relative_position: Vector2) -> Vector2:
 	# Get the screen size from the viewport
 	var screen_size = get_viewport().size
 	# Return position scaled to the screen size
-	return Vector2(relative_position.x * screen_size.x, relative_position.y * screen_size.y)
+	return relative_position * screen_size
 
-# Check if the position is inside circle0
-func is_inside_circle0(pos: Vector2) -> bool:
-	var screen_pos = get_screen_position(circle0_relative_position)
-	if pos.distance_to(screen_pos) > circle0_radius:
-		return false
-	return true
-
-# Check if the position is inside circle1
-func is_inside_circle1(pos: Vector2) -> bool:
-	var screen_pos = get_screen_position(circle1_relative_position)
-	if pos.distance_to(screen_pos) > circle1_radius:
+# Check if the position is inside a circle
+func is_inside_circle(pos: Vector2, circle_position: Vector2, circle_radius: float) -> bool:
+	if pos.distance_to(circle_position) > circle_radius:
 		return false
 	return true
 
@@ -44,30 +36,29 @@ func is_inside_circle1(pos: Vector2) -> bool:
 func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			if is_inside_circle0(event.position):
+			# Check if the touch is inside circle0 or circle1
+			if is_inside_circle(event.position, get_screen_position(circle0_relative_position), circle0_radius):
 				circle0_pressing = true
 				circle0_index = event.index
 				circle0_position = event.position  # Update position to current touch position
-			elif is_inside_circle1(event.position):
+			elif is_inside_circle(event.position, get_screen_position(circle1_relative_position), circle1_radius):
 				circle1_pressing = true
 				circle1_index = event.index
 				circle1_position = event.position  # Update position to current touch position
 		else:
-			if event.index == circle0_index: 
+			# Reset the pressing states when touch ends
+			if event.index == circle0_index:
 				circle0_pressing = false
 				circle0_index = -1
-			elif event.index == circle1_index: 
+			elif event.index == circle1_index:
 				circle1_pressing = false
 				circle1_index = -1
 	elif event is InputEventScreenDrag:
+		# Update position during drag for the active circle
 		if event.index == circle0_index:
-			circle0_position = event.position  # Update position during drag
+			circle0_position = event.position
 		elif event.index == circle1_index:
-			circle1_position = event.position  # Update position during drag
-
-# Update positions of circles when pressing or dragging
-func _process(delta: float) -> void:
-	# No need to move anything here since circles' positions are already updated in input events
+			circle1_position = event.position
 
 # Draw the circles on screen
 func _draw() -> void:
