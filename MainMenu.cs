@@ -12,26 +12,28 @@ public partial class MainMenu : Node2D
 
     public override void _Ready()
     {
-        _texture = TextureUntouched; // Set default texture
+        // Set default texture on ready
+        _texture = TextureUntouched;
     }
 
     public override void _Input(InputEvent @event)
     {
+        // Make sure we are handling touch input correctly in Godot 4.3
         if (@event is InputEventScreenTouch touchEvent)
         {
             if (touchEvent.Pressed)
             {
-                _isTouched = true; // Set the flag when touched
-                _texture = TextureTouched ?? _texture; // Use TextureTouched if available
-                _lastTouchPosition = touchEvent.Position; // Update position
-                QueueRedraw();
+                _isTouched = true; // Mark as touched
+                _texture = TextureTouched ?? _texture; // Use Touched texture
+                _lastTouchPosition = touchEvent.Position; // Update touch position
+                QueueRedraw(); // Ensure screen is redrawn
                 GD.Print($"Touched at: {touchEvent.Position}");
             }
             else
             {
-                _isTouched = false; // Reset flag when released
-                _texture = TextureUntouched ?? _texture; // Use TextureUntouched when released
-                QueueRedraw();
+                _isTouched = false; // Mark as not touched
+                _texture = TextureUntouched ?? _texture; // Use Untouched texture
+                QueueRedraw(); // Ensure screen is redrawn
                 GD.Print($"Released at: {touchEvent.Position}");
             }
         }
@@ -41,18 +43,18 @@ public partial class MainMenu : Node2D
     {
         if (_isTouched && _texture != null)
         {
-            // Update position continuously when touch is active
-            _lastTouchPosition = GetViewport().GetMousePosition(); // Update with live touch position
-            QueueRedraw();
+            // If the screen is being touched, update the last position continuously
+            _lastTouchPosition = GetViewport().GetMousePosition(); // Get the live touch position
+            QueueRedraw(); // Ensure the texture is drawn at the updated position
         }
     }
 
     public override void _Draw()
     {
+        // Make sure we're drawing the texture at the last recorded touch position
         if (_texture != null)
         {
-            // Draw the texture at the current touch position
-            DrawTexture(_texture, _lastTouchPosition);
+            DrawTexture(_texture, _lastTouchPosition); // Draw the texture at touch position
         }
     }
 }
