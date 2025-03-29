@@ -18,7 +18,6 @@ public partial class MainMenu : Node2D
 
     public override void _Input(InputEvent @event)
     {
-        // Make sure we are handling touch input correctly in Godot 4.3
         if (@event is InputEventScreenTouch touchEvent)
         {
             if (touchEvent.Pressed)
@@ -43,18 +42,18 @@ public partial class MainMenu : Node2D
     {
         if (_isTouched && _texture != null)
         {
-            // If the screen is being touched, update the last position continuously
-            _lastTouchPosition = GetViewport().GetMousePosition(); // Get the live touch position
+            // Convert touch position from screen space to local space if needed
+            _lastTouchPosition = GetViewport().GetMousePosition(); // This gets the mouse position in viewport coordinates
             QueueRedraw(); // Ensure the texture is drawn at the updated position
         }
     }
 
     public override void _Draw()
     {
-        // Make sure we're drawing the texture at the last recorded touch position
         if (_texture != null)
         {
-            DrawTexture(_texture, _lastTouchPosition); // Draw the texture at touch position
+            // Draw the texture at the touch position, considering the correct coordinate system
+            DrawTexture(_texture, _lastTouchPosition);
         }
     }
 }
