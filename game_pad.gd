@@ -28,20 +28,25 @@ func get_screen_position(relative_position: Vector2) -> Vector2:
 
 # Check if the position is inside a circle
 func is_inside_circle(pos: Vector2, circle_position: Vector2, circle_radius: float) -> bool:
-	if pos.distance_to(circle_position) > circle_radius:
-		return false
-	return true
+	# Check the distance between the touch position and the circle's center
+	if pos.distance_to(circle_position) <= circle_radius:
+		return true
+	return false
 
 # Handle touch input
 func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
+			# Get screen positions for the circles
+			var circle0_screen_pos = get_screen_position(circle0_relative_position)
+			var circle1_screen_pos = get_screen_position(circle1_relative_position)
+			
 			# Check if the touch is inside circle0 or circle1
-			if is_inside_circle(event.position, get_screen_position(circle0_relative_position), circle0_radius):
+			if is_inside_circle(event.position, circle0_screen_pos, circle0_radius):
 				circle0_pressing = true
 				circle0_index = event.index
 				circle0_position = event.position  # Update position to current touch position
-			elif is_inside_circle(event.position, get_screen_position(circle1_relative_position), circle1_radius):
+			elif is_inside_circle(event.position, circle1_screen_pos, circle1_radius):
 				circle1_pressing = true
 				circle1_index = event.index
 				circle1_position = event.position  # Update position to current touch position
@@ -62,6 +67,10 @@ func _input(event: InputEvent) -> void:
 
 # Draw the circles on screen
 func _draw() -> void:
-	# Draw circles at their positions
-	draw_circle(circle0_position, circle0_radius, circle0_color)
-	draw_circle(circle1_position, circle1_radius, circle1_color)
+	# Calculate the screen positions of the circles
+	var circle0_screen_pos = get_screen_position(circle0_relative_position)
+	var circle1_screen_pos = get_screen_position(circle1_relative_position)
+
+	# Draw circles at their screen positions
+	draw_circle(circle0_screen_pos, circle0_radius, circle0_color)
+	draw_circle(circle1_screen_pos, circle1_radius, circle1_color)
